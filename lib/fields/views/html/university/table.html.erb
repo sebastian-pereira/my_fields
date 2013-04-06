@@ -1,0 +1,72 @@
+<%
+	cities = @country ? @country.cities : []
+	universities = @city ? @city.universities : []
+	faculties = @university ? @university.faculties : []
+	statuses = Setting.studentstatuses
+%>
+
+<tr>
+	<td>Страна</td>
+	<td>
+		<%= select_tag :country, options_for_select([['Выберите страну', nil]] + Country.all.collect{ |o| [o.name, o.id]}, @county ? @country.id : nil), :class => :country  %>
+	</td>
+</tr>
+<tr>
+	<td>Город</td>
+	<td>
+		<%= select_tag :city, options_for_select([['Выберите город', nil]] + cities.collect{ |o| [o.name, o.id]}, @city ? @city.id : nil), :class => :country_city %>
+	</td>
+</tr>
+
+<tr>
+	<td>ВУЗ</td>
+	<td>
+		<%= select_tag :university, options_for_select([['Выберите ВУЗ', nil]] + universities.collect{ |o| [o.abbr, o.id]}, @university ? @university.id : nil), :class => :university %>
+	</td>
+</tr>
+
+<tr>
+	<td>Факультет</td>
+	<td>
+		<%= select_tag :faculty, options_for_select([['Выберите факультет', nil]] + faculties.collect{ |o| [o.name, o.id]}, @faculty != nil ? @faculty.id : nil), :class => :faculty %>
+	</td>
+</tr>
+
+<tr>
+	<td>Статус</td>
+	<td>
+		<%= select_tag :studentstatus, options_for_select([['Выберите статус', nil]] + statuses.collect{ |o| [o.value, o.id]}, @status != nil ? @status.id : nil), :class => :studentstatus %>
+	</td>
+</tr>
+
+<script>
+	function get_all_for_select(src, module, pars, where, view_field, func){
+		func = func != undefined ? func : 'get_all'
+		console.debug(func)
+		$.ajax({
+	      url :'/administration/do',
+	      type : 'get',
+	      dataType : 'json', 
+	      data : {module : module, func : func, pars : pars},
+	    }).done(function(response){
+	    	dest = src.closest('form').find(where).empty().append($('<option/>').val(0).text('Не указано'));
+	        $(response).each(function(){
+	          dest.append($('<option/>').val(this.id).text($(this).attr(view_field))); 
+	        });
+	    });
+	}
+
+	$(document).ready(function(){
+	  $('select.country').change(function(){
+	  	get_all_for_select($(this), 'countries', {country : $(this).val()}, '.country_city', 'name')
+	  });
+	  $('select.country_city').change(function(){
+	  	get_all_for_select($(this), 'cities', {city : $(this).val()}, '.university', 'abbr')
+	  });
+	  $('select.university').change(function(){
+	  	get_all_for_select($(this), 'universities', {university : $(this).val()}, '.faculty', 'name', 'get_faculties')
+	  	//get_all_for_select($(this), 'universities', {university : $(this).val()}, '.faculty', 'name', 'get_faculties')
+	  });
+	  
+	});
+</script>
