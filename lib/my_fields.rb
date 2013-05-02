@@ -1,6 +1,12 @@
 module MyFields
+  require 'fields/classes/errors/value'
   autoload :Field, 'fields/classes/field'
   autoload :Text, 'fields/classes/text'
+  autoload :Link, 'fields/classes/link'
+  autoload :Label, 'fields/classes/label'
+  autoload :Hidden, 'fields/classes/hidden'
+  autoload :Checkbox, 'fields/classes/checkbox'
+  autoload :Select, 'fields/classes/select'
   autoload :Textarea, 'fields/classes/textarea'
   autoload :University, 'fields/classes/university'
   
@@ -18,4 +24,6 @@ module MyFields
      end
       
    end
+   
+   
 end

@@ -1,0 +1,2 @@
+<%#= hidden_field @name, @method, @value %>
+<%= text_field_tag name + (@method.empty? ? '' : '[' + @method + ']'), @value, @options %>

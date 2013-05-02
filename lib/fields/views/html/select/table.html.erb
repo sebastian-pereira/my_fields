@@ -1,0 +1,8 @@
+<tr>
+	<td>
+		<%= label_tag label %>
+	</td>
+	<td>
+		<%= select_tag name + (method.empty? ? '' : '[' + method + ']'), options_for_select(values, value) %>
+	</td>
+</tr>
